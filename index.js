@@ -18,6 +18,8 @@ async function run() {
         gl.viewport(0, 0, canvas.width, canvas.height);
 
         gl.uniform2f(programInfo.uniformLocations.resolution, canvas.width, canvas.height);
+
+        isRolling = 2;
     });
 
     const gl = canvas.getContext('webgl');
@@ -27,7 +29,7 @@ async function run() {
     let isMousePressed = false;
     let isMouseDragged = false;
     let mouseX, mouseY;
-    let isRolling = 10;
+    let isRolling = 20;
 
     document.addEventListener('mousedown', (event) => {
         if (event.button == 0) isMousePressed = true;
@@ -46,8 +48,6 @@ async function run() {
                 isMouseDragged = true;
                 mouseX = event.clientX;
                 mouseY = event.clientY;
-
-                requestAnimationFrame(render);
             }
 
             const dX = event.clientX - mouseX;
@@ -265,9 +265,23 @@ async function run() {
         gl.uniform3f(programInfo.uniformLocations.camPos, camDist * Math.cos(beta) * Math.cos(alpha), camDist * Math.sin(beta), camDist * Math.cos(beta) * Math.sin(alpha));
 
         previousDelta = currentDelta;
+
+        console.log("Render");
     }
 
+    function lazyRender() {
+        isRolling = 3;
+        console.log("Lazy");
+        setTimeout(() => {
+            lazyRender();
+        }, 60000);
+    }
+    
     requestAnimationFrame(render);
+
+    setTimeout(() => {
+        lazyRender();
+    }, 10000);
 }
 
 run();
