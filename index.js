@@ -244,7 +244,7 @@ async function run() {
 
         if (fpsLimit && delta < 1000.0 / fpsLimit) return; // limit fps
         if (isRolling == 0 && !isMouseDragged) return; // don't render if not needed
-        else isRolling--;
+        isRolling--;
 
         // Clear Canvas
         gl.clearColor(0.0, 0.0, 0.0, 1.0);
