@@ -29,7 +29,7 @@ async function run() {
     let isMousePressed = false;
     let isMouseDragged = false;
     let mouseX, mouseY;
-    let isRolling = 20;
+    let isRolling = 20; // First used as boolean if mouseWheel was rolling but transformed into "render this many frames" when it is needed
 
     document.addEventListener('mousedown', (event) => {
         if (event.button == 0) isMousePressed = true;
@@ -215,7 +215,7 @@ async function run() {
                         gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, sun);
                         gl.generateMipmap(gl.TEXTURE_2D);
 
-                        requestAnimationFrame(render);
+                        isRolling = 2;
                     }
                 }
             }
@@ -265,18 +265,16 @@ async function run() {
         gl.uniform3f(programInfo.uniformLocations.camPos, camDist * Math.cos(beta) * Math.cos(alpha), camDist * Math.sin(beta), camDist * Math.cos(beta) * Math.sin(alpha));
 
         previousDelta = currentDelta;
-
-        console.log("Render");
     }
 
     function lazyRender() {
         isRolling = 3;
-        console.log("Lazy");
+
         setTimeout(() => {
             lazyRender();
         }, 60000);
     }
-    
+
     requestAnimationFrame(render);
 
     setTimeout(() => {
